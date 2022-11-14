@@ -6,6 +6,8 @@ workspace {
         wikiosko = softwareSystem "Wikiosko" {
             appMovil = container "Aplicación movil" "Provee accesos al usuario a todas las funcionalidades desde un dispositivo movil" "" "AppMobile"{
                 usuario -> this "Accede a"
+                
+                
             }
             
             products = container "Products" "Bounded context relacionado a los productos que poseen las tiendas" "" "products"{
@@ -15,10 +17,16 @@ workspace {
             
             stores = container "Stores" "Bounded context relacionado a las tiendas registrados en la aplicación" "" "stores"{
                 appMovil -> this "Obtiene las tiendas registradas"
+                backend = component "Backend del sistema"{
+                appMovil -> this "Expone Funcionalidades"
+                }
+            searchstore = component "Busqueda de local"
+            dataconnector = component "Conector de la Base de Datos"
             }
             
             security = container "Security" "Bounded context relacionado a la creacion, autenticacion y actualización de cuentas" "" "security"{
                 appMovil -> this "Valida o registra las cuentas ingresadas"
+                
             }
             
             social = container "Social" "Bounded context relacionado a las promociones y las tiendas favoritas" "" "social"{
@@ -29,6 +37,7 @@ workspace {
             history = container "History" "Bounded context relacionado al historial de tiendas visitadas" "" "history" {
                 appMovil -> this "Visualiza el historial de las tiendas visitadas"
                 stores -> this "Registra tiendas como visitadas"
+                searchstore -> this "Acceso a la lista de opciones"
             }
             
             notification = container "Notification" "Bounded context relacionado a la emision de notificaciones" "" "notification" {
@@ -42,6 +51,7 @@ workspace {
                 products -> this "Almacenan las reservas realizadas"
                 security -> this "Valida la existencia de la cuenta o la registra"
                 social -> this "Almacen tiendas favoritas"
+                dataconnector -> this "Lectura y escritura de base de data."
             }
 
             usuario -> this "Accede a"
@@ -65,6 +75,10 @@ workspace {
         }
    
         container wikiosko {
+            include *
+            autolayout lr
+        }
+        component stores {
             include *
             autolayout lr
         }
